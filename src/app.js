@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
 const usersRouter = require('../routes/routes.users');
+const dataRouter = require('../routes/routes.data');
+const installRouter = require('../routes/routes.install');
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(cors({
 }));
 
 app.use('/api/users', usersRouter);
+app.use('/api/data', dataRouter);
+app.use('/api/install', installRouter);
 
 app.use(function errorHandler(error, req, res, next) {
     let response;

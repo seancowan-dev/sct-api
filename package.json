@@ -12,8 +12,6 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "predeploy": "npm audit",
-    "migrate": "postgrator --config postgrator-config.js",
-    "migrate:production": "env DATABASE_URL=$(heroku config:get DATABASE_URL -a secure-inlet-58346) npm run migrate",
     "deploy": "git push heroku master"
   },
   "keywords": [],
@@ -35,9 +33,8 @@
     "mkdirp": "^1.0.4",
     "mocha-steps": "^1.3.0",
     "morgan": "^1.9.1",
-    "pg": "^7.18.2",
-    "postgrator": "^4.0.0",
-    "postgrator-cli": "^3.3.0",
+    "pg": "^8.3.0",
+    "postgrator": "^4.0.1",
     "to-uuid": "^0.1.3",
     "xss": "^1.0.6"
   },
@@ -45,6 +42,7 @@
     "chai": "^4.2.0",
     "mocha": "^7.1.2",
     "nodemon": "^2.0.2",
+    "postgrator-cli": "^4.0.0",
     "supertest": "^4.0.2"
   }
 }
