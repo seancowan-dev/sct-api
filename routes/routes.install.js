@@ -15,13 +15,19 @@ installRouter // READ
     });
 
 installRouter // READ
-    .route('/checkInstall') // Get all the nav links for the specified site
+    .route('/check/:site') // Get the installed status of the site
     .get((req, res, next) => {
-
+        InstallService.getBasicInstallStatus(req.app.get('db'), req.params.site).then(install => {
+            res.set('Content-Type', 'application/json')
+            .status(200)
+            .location(path.posix.join(req.originalUrl, `/${req.params.site}`))
+            .json({install});
+        })
+        .catch(next);
     });
 
 installRouter // CREATE
-    .route('/:site') // Create a complete nav links DB entry for a specified site
+    .route('/preinstall/:site') // Create a site entry in the database, but do not install yet
     .post(bodyParser, (req, res, next) => {
         InstallService.createSiteInstallation(req.app.get('db'), req.body).then(install => {
             res.set('Content-Type', 'application/json')
@@ -29,18 +35,29 @@ installRouter // CREATE
             .location(path.posix.join(req.originalUrl, `/${req.params.site}`))
             .json({install});
         })
+        .catch(next);
     });
 
-installRouter // UPDATE
-    .route('/update/:site') // Update an entire nav links DB entry for a specified site
+installRouter // UPDATE (Install Site)
+    .route('/:site') // Sets the site to 'installed' status : change installed status
     .patch(bodyParser, (req, res, next) => {
-
+        InstallService.installBasicSite(req.app.get('db'), req.params.site, req.body).then(install => {
+            res.set('Content-Type', 'application/json')
+            .status(202)
+            .location(path.posix.join(req.originalUrl, `/${req.params.site}`))
+            .json({install});
+        })
+        .catch(next);
     });
 
 installRouter // DELETE
-    .route('/delete/:site') // Delete an entire nav links DB entry for a specified site
+    .route('/delete/:site') // Delete a site from the database
     .delete((req, res, next) => {
-        // do stuff here
+        InstallService.deleteSiteEntry(req.app.get('db'), req.params.site).then(response => {
+            res.set('Content-Type', 'application/json')
+            .status(204).end();
+        })
+        .catch(next);
     });
 
 module.exports = installRouter;

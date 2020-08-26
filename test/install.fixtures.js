@@ -13,6 +13,7 @@ function makeTestInstall() {
             "id": "64fd3e42-0ad1-418c-8a3e-214164807b6f",
             "name": "Just A Site, Now Better",
             "installed": "true",
+            "created_at": "2020-08-18 12:00:00-07"
         }
     ];
 
