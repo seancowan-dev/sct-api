@@ -5,6 +5,9 @@ const ComponentService = {
     getComponentByName(knex, name) { // Get a single nav link for a specified site
         return knex.select('*').from('components').where({name});
     },
+    getAllComponents(knex) {
+        return knex.select('*').from('components');
+    },
     createComponentEntry(knex, component) { // Create a single nav link 
         return knex.insert(component).into('components').returning('*').then(rows => { return rows[0] });
     },

@@ -22,6 +22,8 @@ app.use(cors({
     origin: "*"
 }));
 
+app.use(express.static('public'))
+
 app.use('/api/users', usersRouter);
 app.use('/api/data', dataRouter);
 app.use('/api/install', installRouter);

@@ -4,7 +4,7 @@ const xss = require('xss');
 const { requireAPIKey } = require('../middleware/auth');
 const { requireAuth } = require('../middleware/loginAuth');
 const componentRouter = express.Router()
-const bodyParser = express.json()
+const bodyParser = express.json({limit: '50mb'})
 const ComponentService = require('../services/service.components');
 
 // These routes are for storing and retrieving components from the server
@@ -15,12 +15,15 @@ const ComponentService = require('../services/service.components');
 componentRouter // READ
     .route('/create/:name') // Create a component entry
     .post(bodyParser, (req, res, next) => {
+        console.log(req.body);
         ComponentService.createComponentEntry(req.app.get('db'), req.body).then(comp => {
+            console.log(comp);
             res.set('Content-Type', 'application/json')
             .status(201)
             .location(path.posix.join(req.originalUrl, `/${req.params.name}`))
             .json({comp});
         })
+        .catch(next);
     });
 //READ - single
 componentRouter // READ
@@ -32,6 +35,7 @@ componentRouter // READ
             .location(path.posix.join(req.originalUrl, `/${req.params.name}`))
             .json({comp});
         })
+        .catch(next);
     });
 
 //UPDATE - single
@@ -44,6 +48,7 @@ componentRouter // READ
             .location(path.posix.join(req.originalUrl, `/${req.params.name}`))
             .json({comp});
         })
+        .catch(next);
     });
 
 //DELETE - single
@@ -53,15 +58,26 @@ componentRouter // READ
         ComponentService.deleteComponentByName(req.app.get('db'), req.params.name).then(comp => {
             res.set('Content-Type', 'application/json')
             .status(204).end();
-        });
+        })
+        .catch(next);
     });
 
-//CREATE - batch
+//CREATE - multi
 
-//READ - batch
+//READ - multi
+componentRouter // READ
+    .route('/get') // Get a specified component by name
+    .get((req, res, next) => {
+        ComponentService.getAllComponents(req.app.get('db')).then(comps => {
+            res.set('Content-Type', 'application/json')
+            .status(200)
+            .location(path.posix.join(req.originalUrl, `/${req.params.name}`))
+            .json({comps});
+        })
+        .catch(next);
+    });
+//UPDATE - multi
 
-//UPDATE - batch
-
-//DELETE - batch
+//DELETE - multi
 
 module.exports = componentRouter;
