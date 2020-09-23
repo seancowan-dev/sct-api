@@ -7,7 +7,7 @@ const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
 const usersRouter = require('../routes/routes.users');
 const dataRouter = require('../routes/routes.data');
 const installRouter = require('../routes/routes.install');
-const componentRouter = require('../routes/routes.components');
+const pageRouter = require('../routes/routes.pages');
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.use(express.static('public'))
 app.use('/api/users', usersRouter);
 app.use('/api/data', dataRouter);
 app.use('/api/install', installRouter);
-app.use('/api/comps', componentRouter);
+app.use('/api/pages', pageRouter);
 
 app.use(function errorHandler(error, req, res, next) {
     let response;
